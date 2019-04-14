@@ -5,7 +5,6 @@
   <title>JS school</title>
 </head>
 <body>
-<div id="lines"></div>
 <script>
   const LINES_FROM = 1;
   const LINES_TO = 100;
@@ -82,7 +81,7 @@
         divLine.appendChild(divElement);
       })
 
-      document.getElementById('lines').appendChild(divLine);
+      document.body.appendChild(divLine);
 
       setInterval(function () {
         divLine.style.backgroundColor = getRandomColor();
