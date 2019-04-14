@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS school</title>
+</head>
+<body>
+<div id="lines"></div>
+<script>
+  const LINES_FROM = 1;
+  const LINES_TO = 100;
+
+  const UPDATE_COLOR_TIME_FROM = 500;
+  const UPDATE_COLOR_TIME_TO = 1000;
+
+  let countLines = Math.floor(Math.random() * LINES_TO) + LINES_FROM;
+
+  let lineWidth = window.innerWidth + 'px';
+  let lineHeight = window.innerHeight / countLines + 'px';
+
+  let data = {
+    lines: []
+  };
+
+  let getRandomColor = () => "#" + ((1 << 24) * Math.random() | 0).toString(16);
+
+  let generateElements = () => {
+    let lineWidthPercentage = 100;
+    let generatedElements = [];
+    let elementsPercentages = [];
+
+    while (lineWidthPercentage > 0) {
+      let oneElementPercentage = Math.round(Math.random() * (lineWidthPercentage - 1)) + 1;;
+      elementsPercentages.push(oneElementPercentage);
+      lineWidthPercentage -= oneElementPercentage;
+    }
+
+    elementsPercentages.forEach(function (percentage) {
+      generatedElements.push({
+        background: getRandomColor(),
+        width: percentage
+      });
+    })
+
+    return generatedElements;
+  }
+
+  let createElement = (element, updateTime) => {
+    let divElement = document.createElement('div');
+    divElement.style.backgroundColor = element.background;
+    divElement.style.height = lineHeight;
+    divElement.style.float = 'left';
+    divElement.style.width = element.width + '%';
+
+    setInterval(function () {
+      divElement.style.backgroundColor = getRandomColor();
+    }, updateTime);
+
+    return divElement;
+  }
+
+  let renderLines = () => {
+
+    for (let i = 0; i < countLines; i++) {
+      let updateColorTime = Math.floor(Math.random() * UPDATE_COLOR_TIME_TO) + UPDATE_COLOR_TIME_FROM;
+
+      data.lines.push({
+        background: getRandomColor(),
+        updateTime: updateColorTime,
+        elements: generateElements()
+      })
+    }
+
+    data.lines.forEach(function (line) {
+      let divLine = document.createElement('div');
+      divLine.style.backgroundColor = line.background;
+      divLine.style.width = lineWidth;
+      divLine.style.height = lineHeight;
+
+      line.elements.forEach(function (element) {
+        let divElement = createElement(element, line.updateTime)
+        divLine.appendChild(divElement);
+      })
+
+      document.getElementById('lines').appendChild(divLine);
+
+      setInterval(function () {
+        divLine.style.backgroundColor = getRandomColor();
+      }, line.updateTime)
+    })
+  }
+
+  renderLines();
+</script>
+</body>
+</html>
